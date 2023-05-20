@@ -1,7 +1,7 @@
 version: '3.9'
 
-networks:
-  dev_network:
+#networks:
+#  dev_network:
 
 services:
 
@@ -10,75 +10,75 @@ services:
     ports:
       - "5431:5432"
     environment:
-      POSTGRES_USER: ${PG_USER}
-      POSTGRES_PASSWORD: ${PG_PASSWORD}
-      POSTGRES_DB: ${PG_DB}
-
-    networks:
-      dev_network:
-        aliases:
-          - ${PG_HOST}
-
-  migrate:
-    build:
-      context: .
-      dockerfile: Dockerfile.migrate
-    environment:
-      PG_USER: ${PG_USER}
-      PG_PASSWORD: ${PG_PASSWORD}
-      PG_HOST: ${PG_HOST}
-      PG_PORT: ${PG_PORT}
-      PG_DB: ${PG_DB}
-
-    depends_on:
-      - db
-    working_dir: /app
-
-    networks:
-      dev_network:
-    volumes:
-      - ./app/:/app
-
-  app:
-    build:
-      context: .
-    environment:
-      PG_USER: ${PG_USER}
-      PG_PASSWORD: ${PG_PASSWORD}
-      PG_HOST: ${PG_HOST}
-      PG_PORT: ${PG_PORT}
-      PG_DB: ${PG_DB}
-      WAIT_HOSTS: ${PG_HOST}:${PG_PORT}
-    ports:
-      - "5000:5000"
-    depends_on:
-      - db
-    networks:
-      dev_network:
-        aliases:
-          - ads
-    volumes:
-      - ./app:/app
-
-  tests:
-    build:
-      context: .
-      dockerfile: Dockerfile.tests
-    environment:
-      API_URL: ${API_URL}
-      PG_USER: ${PG_USER}
-      PG_PASSWORD: ${PG_PASSWORD}
-      PG_HOST: ${PG_HOST}
-      PG_PORT: ${PG_PORT}
-      PG_DB: ${PG_DB}
-
-    depends_on:
-      - db
-      - app
-    working_dir: /app
-    entrypoint: pytest -v -s
-
-    networks:
-      dev_network:
-    volumes:
-      - ./app/:/app
+      POSTGRES_USER: 'admin'
+      POSTGRES_PASSWORD: '1234'
+      POSTGRES_DB: 'flask'
+#
+#    networks:
+#      dev_network:
+#        aliases:
+#          - ${PG_HOST}
+#
+#  migrate:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.migrate
+#    environment:
+#      PG_USER: ${PG_USER}
+#      PG_PASSWORD: ${PG_PASSWORD}
+#      PG_HOST: ${PG_HOST}
+#      PG_PORT: ${PG_PORT}
+#      PG_DB: ${PG_DB}
+#
+#    depends_on:
+#      - db
+#    working_dir: /app
+#
+#    networks:
+#      dev_network:
+#    volumes:
+#      - ./app/:/app
+#
+#  app:
+#    build:
+#      context: .
+#    environment:
+#      PG_USER: ${PG_USER}
+#      PG_PASSWORD: ${PG_PASSWORD}
+#      PG_HOST: ${PG_HOST}
+#      PG_PORT: ${PG_PORT}
+#      PG_DB: ${PG_DB}
+#      WAIT_HOSTS: ${PG_HOST}:${PG_PORT}
+#    ports:
+#      - "5000:5000"
+#    depends_on:
+#      - db
+#    networks:
+#      dev_network:
+#        aliases:
+#          - ads
+#    volumes:
+#      - ./app:/app
+#
+#  tests:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.tests
+#    environment:
+#      API_URL: ${API_URL}
+#      PG_USER: ${PG_USER}
+#      PG_PASSWORD: ${PG_PASSWORD}
+#      PG_HOST: ${PG_HOST}
+#      PG_PORT: ${PG_PORT}
+#      PG_DB: ${PG_DB}
+#
+#    depends_on:
+#      - db
+#      - app
+#    working_dir: /app
+#    entrypoint: pytest -v -s
+#
+#    networks:
+#      dev_network:
+#    volumes:
+#      - ./app/:/app
